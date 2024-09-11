@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-block/card-block",
+  "version": "0.1.0",
+  "title": "Card Block",
+  "category": "widgets",
+  "description": "Display cards for domains.",
+  "supports": {
+    "color": {
+      "background": false,
+      "text": true
+    },
+    "html": false,
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "textdomain": "card-block",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "style": "file:./style.css"
+}
