@@ -11,9 +11,10 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps } from '@wordpress/block-editor';
-import { useEffect, useState } from '@wordpress/element';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 
+import { useEffect, useState } from '@wordpress/element';
+import apiFetch from '@wordpress/api-fetch';
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -26,8 +27,9 @@ export default function Edit() {
 	const [domains, setDomains] = useState([]);
 
 	useEffect(() => {
-		fetch('http://localhost:10038/wp-json/wp/v2/domain')
-			.then(response => response.json())
+		const apiUrl = '/wp/v2/domain';
+		fetch('http://localhost:10033/wp-json/wp/v2/domain')
+		apiFetch({ path: apiUrl })
 			.then(data => {
 				const domainDataPromises = data.map(domain => {
 					const mediaUrl = domain._links['wp:featuredmedia']?.[0]?.href;
@@ -61,9 +63,9 @@ export default function Edit() {
 	return (
 		<div {...useBlockProps()}>
 			{domains.length > 0 ? (
-				domains.map((domain, index) => (
-					<div class="ws-container">
-						<div class="ws-cards-container-wrapper ws_cards_xl">
+				<div className="ws-container">
+					<div className="ws-cards-container-wrapper ws_cards_xl">
+						{domains.map((domain, index) => (
 							<div className="ws-cards-container" key={index}>
 								<img src={domain.image} alt={domain.title} className="domain_card_diamond" />
 								<div className="ws-card-img">
@@ -73,7 +75,7 @@ export default function Edit() {
 									<img src={domain.image} alt={domain.title} title={domain.title} />
 									<span className="ws-card-inner-contents">
 										<h5>{domain.title}</h5>
-										<h6 dangerouslySetInnerHTML={{ __html: domain.description }}></h6>
+										{/* <h6 dangerouslySetInnerHTML={{ __html: domain.description }}></h6> */}
 										{/* Add other fields such as price here */}
 									</span>
 									<div className="ws-card-likes">
@@ -82,12 +84,13 @@ export default function Edit() {
 									</div>
 								</div>
 							</div>
-						</div>
+						))}
 					</div>
-				))
+				</div>
 			) : (
 				<p>{__('Loading domains...', 'card-block')}</p>
 			)}
 		</div>
 	);
+
 }
