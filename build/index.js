@@ -45,7 +45,7 @@ function Edit({
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     const fetchDomains = async () => {
       setLoading(true);
-      const apiUrl = `http://localhost:10038/wp-json/wstr/v1/domains/?type=${type}`;
+      const apiUrl = `http://localhost:10033/wp-json/wstr/v1/domains/?type=${type}`;
       console.log('Fetching data from:', apiUrl);
       try {
         const response = await fetch(apiUrl);
@@ -89,6 +89,9 @@ function Edit({
         }, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Recently Sold', 'card-block'),
           value: 'recents'
+        }, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Trending', 'card-block'),
+          value: 'trending'
         }],
         onChange: newType => setAttributes({
           type: newType

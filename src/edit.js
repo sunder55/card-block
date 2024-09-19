@@ -14,7 +14,7 @@ export default function Edit({ attributes, setAttributes }) {
 	useEffect(() => {
 		const fetchDomains = async () => {
 			setLoading(true);
-			const apiUrl = `http://localhost:10038/wp-json/wstr/v1/domains/?type=${type}`;
+			const apiUrl = `http://localhost:10033/wp-json/wstr/v1/domains/?type=${type}`;
 			console.log('Fetching data from:', apiUrl);
 
 			try {
@@ -59,6 +59,7 @@ export default function Edit({ attributes, setAttributes }) {
 						{ label: __('New', 'card-block'), value: 'new' },
 						{ label: __('Premium', 'card-block'), value: 'premium' },
 						{ label: __('Recently Sold', 'card-block'), value: 'recents' },
+						{ label: __('Trending', 'card-block'), value: 'trending' },
 					]}
 					onChange={(newType) => setAttributes({ type: newType })}
 				/>

@@ -9,8 +9,17 @@ $type = isset($attributes['type']) ? $attributes['type'] : 'new';
 // Display a message indicating the type (for debugging purposes)
 echo '<p>Currently displaying ' . esc_html($type) . ' domains.</p>';
 
+// $url = "http://localhost:10033/wp-json/wstr/v1/domains/?type=new";
+// $ch = curl_init();
+// curl_setopt($ch, CURLOPT_URL, $url);
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+// curl_setopt($ch, CURLOPT_ENCODING, ""); // this will handle gzip content
+// $result = curl_exec($ch);
+// curl_close($ch);
+// var_dump($result);
+
 // Fetch data from the API based on the selected type
-$response = wp_remote_get("http://localhost:10038/wp-json/wstr/v1/domains/?type=$type");
+$response = wp_remote_get("http://localhost:10033/wp-json/wstr/v1/domains/?type=$type");
 
 if (is_wp_error($response)) {
 	return '<p>' . esc_html__('Failed to fetch domains.', 'card-block') . '</p>';
@@ -24,17 +33,20 @@ if (empty($domains)) {
 // Initialize output
 $output = '';
 
-if ($type === 'new') {
+
+if ($type === 'recents') {
 	// Initialize Swiper container and wrapper
 	$output .= '<div class="swiper-container ws-container">';
 	$output .= '<div class="swiper-wrapper ws-cards-container-wrapper ws_cards_xl">';
-
 	foreach ($domains as $domain) {
 		$title = esc_html($domain['title']);
-		$image_url = esc_url($domain['featured_image']);
-		$currency = esc_html($domain['currency']);
-		$regular_price = esc_html($domain['regular_price']);
-		$sale_price = esc_html($domain['sale_price']);
+		// $image_url = esc_url($domain['featured_image']);
+		$default_image_url = home_url('/wp-content/themes/assets/images/alternate-domain.png');
+		// Check if the featured image exists; if not, use the fallback image
+		$image_url = !empty($domain['featured_image']) ? esc_url($domain['featured_image']) : esc_url($default_image_url);
+		// $currency = esc_html($domain['currency']);
+		// $regular_price = esc_html($domain['regular_price']);
+		// $sale_price = esc_html($domain['sale_price']);
 		$discount_percent = esc_html($domain['precentage_discount']);
 		$term_exist = isset($domain['term_exist']) ? (bool) $domain['term_exist'] : true; // Default to true if not set
 
@@ -83,10 +95,11 @@ if ($type === 'new') {
 		$output .= '<img src="' . $display_image . '" alt="' . $title . '" title="' . $title . '" class="card_logo_img"/>';
 		$output .= '<span class="ws-card-inner-contents">';
 		$output .= '<h5><a href="' . esc_url($domain['permalink']) . '">' . $title . '</a></h5>';
-		$output .= '<div class="ws_card_price_wrapper ws_flex gap_10">';
-		$output .= '<p class="regular_price">' . $currency . $regular_price . '</p>';
-		$output .= '<p class="sale_price">' . $currency . $sale_price . '</p>';
-		$output .= '</div>';
+		// $output .= '<div class="ws_card_price_wrapper ws_flex gap_10">';
+		// $output .= '<p class="regular_price">' . $currency . $regular_price . '</p>';
+		// $output .= '<p class="sale_price">' . $currency . $sale_price . '</p>';
+		// $output .= '</div>';
+		$output .= get_wstr_price($domain['id']);
 		$output .= '</span>';
 		$output .= '<div class="ws-card-likes">';
 		$output .= '<h6><span>2k</span><i class="fa-solid fa-heart"></i></h6>'; // Example placeholder
@@ -96,17 +109,68 @@ if ($type === 'new') {
 	}
 	$output .= '</div>';
 	$output .= '</div>';
+} elseif ($type === 'trending') {
+	$output .= '<div class="ws_trending_cards">';
+	$output .= '<div class="ws-cards-container-wrapper ws_cards_xl">';
+	foreach ($domains as $domain) {
+
+		$title = esc_html($domain['title']);
+		$default_image_url = home_url('/wp-content/themes/assets/images/alternate-domain.png');
+		// Check if the featured image exists; if not, use the fallback image
+		$image_url = !empty($domain['featured_image']) ? esc_url($domain['featured_image']) : esc_url($default_image_url);
+		$currency = esc_html($domain['currency']);
+		$regular_price = esc_html($domain['regular_price']);
+		$sale_price = esc_html($domain['sale_price']);
+		$discount_percent = esc_html($domain['precentage_discount']);
+		$term_exist = isset($domain['term_exist']) ? (bool) $domain['term_exist'] : true; // Default to true if not set
+
+		// Define the logo URL
+		$logo = !empty($domain['logo']) ? esc_url($domain['logo']) : '';
+		$display_image = !empty($logo) ? $logo : $image_url;
+		$output .= '<div class="ws-card-contents ws-flex">';
+		if ((int) $discount_percent > 0) {
+			$output .= '<div class="ws_discount_percent"> -' . $discount_percent . '%</div>';
+		}
+		$output .= '<img src="' . $display_image . '" alt="' . $title . '" title="' . $title . '" class="card_logo_img"/>';
+		$output .= '<span class="ws-card-inner-contents">';
+		$output .= '<h5><a href="' . esc_url($domain['permalink']) . '">' . $title . '</a></h5>';
+		$output .= '<div class="ws_card_price_wrapper ws_flex gap_10">';
+
+		// Regular Price
+		// $regular_price = get_wstr_regular_price(get_the_ID());
+		// $output .= '<p class="regular_price">' . get_wstr_currency() . get_wstr_regular_price(get_the_ID());
+		// '</p>';
+		$output .= get_wstr_price($domain['id']);
+
+		// Sale Price
+		// $sale_price = get_wstr_sale_price(get_the_ID());
+		// $output .= '<p class="sale_price">' . get_wstr_currency() . $get_wstr_regular_price(get_the_ID());
+		// '</p>';
+
+
+		$output .= '</div>';
+		$output .= '</span>';
+		$output .= '<div class="ws-card-likes">';
+		$output .= '<h6><span>2k</span><i class="fa-solid fa-heart"></i></h6>'; // Example placeholder
+		$output .= '</div>';
+		$output .= '</div>'; // Close ws-card-contents
+	}
+	$output .= '</div>';
+	$output .= '</div>';
 } else {
+	// var_dump($domains);
 	// Generate dynamic HTML based on the selected type
-	$output .= '<div class="ws-container">';
+	$output .= '<div class="ws-container new">';
 	$output .= '<div class="ws-cards-container-wrapper ws_cards_xl">';
 
 	foreach ($domains as $domain) {
 		$title = esc_html($domain['title']);
-		$image_url = esc_url($domain['featured_image']);
-		$currency = esc_html($domain['currency']);
-		$regular_price = esc_html($domain['regular_price']);
-		$sale_price = esc_html($domain['sale_price']);
+		$default_image_url = home_url('/wp-content/themes/assets/images/alternate-domain.png');
+		// Check if the featured image exists; if not, use the fallback image
+		$image_url = !empty($domain['featured_image']) ? esc_url($domain['featured_image']) : esc_url($default_image_url);
+		// $currency = esc_html($domain['currency']);
+		// $regular_price = esc_html($domain['regular_price']);
+		// $sale_price = esc_html($domain['sale_price']);
 		$discount_percent = esc_html($domain['precentage_discount']);
 		$term_exist = isset($domain['term_exist']) ? (bool) $domain['term_exist'] : true; // Default to true if not set
 
@@ -146,7 +210,7 @@ if ($type === 'new') {
 		$output .= '</div>';
 
 		$output .= '<div class="ws-card-img">';
-		$output .= '<img src="' . $image_url . '" alt="' . $title . '" />';
+		$output .= '<img src="' . $image_url . '" alt="' . esc_attr($title) . '" />';
 		$output .= '</div>';
 		$output .= '<div class="ws-card-contents ws-flex">';
 		if ((int) $discount_percent > 0) {
@@ -155,10 +219,11 @@ if ($type === 'new') {
 		$output .= '<img src="' . $display_image . '" alt="' . $title . '" title="' . $title . '" class="card_logo_img"/>';
 		$output .= '<span class="ws-card-inner-contents">';
 		$output .= '<h5><a href="' . esc_url($domain['permalink']) . '">' . $title . '</a></h5>';
-		$output .= '<div class="ws_card_price_wrapper ws_flex gap_10">';
-		$output .= '<p class="regular_price">' . $currency . $regular_price . '</p>';
-		$output .= '<p class="sale_price">' . $currency . $sale_price . '</p>';
-		$output .= '</div>';
+		// $output .= '<div class="ws_card_price_wrapper ws_flex gap_10">';
+		// $output .= '<p class="regular_price">' . $currency . $regular_price . '</p>';
+		// $output .= '<p class="sale_price">' . $currency . $sale_price . '</p>';
+		// $output .= '</div>';
+		$output .= get_wstr_price($domain['id']);
 		$output .= '</span>';
 		$output .= '<div class="ws-card-likes">';
 		$output .= '<h6><span>2k</span><i class="fa-solid fa-heart"></i></h6>'; // Example placeholder
