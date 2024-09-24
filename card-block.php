@@ -35,28 +35,47 @@ add_action('init', 'create_block_card_block_block_init');
 // require_once __DIR__ . '/src/render.php';?
 
 
-function swiper_slide_enqueue_script()
+// function swiper_slide_enqueue_script()
+// {
+// 	// Enqueue Swiper CSS
+// 	wp_enqueue_style(
+// 		'swiper-style',
+// 		'https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css',
+// 		array(),
+// 		'8.0.7' // Swiper version
+// 	);
+
+// 	// Enqueue Swiper JS
+// 	wp_enqueue_script(
+// 		'swiper-script',
+// 		'https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js',
+// 		array('jquery'), // Add jQuery as a dependency if needed
+// 		'8.0.7', // Swiper version
+// 		true // Load in footer
+// 	);
+// }
+// add_action('wp_enqueue_scripts', 'swiper_slide_enqueue_script');
+
+
+
+
+function enqueue_slick_slider()
 {
-	// Enqueue Swiper CSS
-	wp_enqueue_style(
-		'swiper-style',
-		'https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css',
-		array(),
-		'8.0.7' // Swiper version
-	);
+	// Enqueue Slick Slider CSS
+	wp_enqueue_style('slick-slider-css', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css', array(), '1.8.1');
 
-	// Enqueue Swiper JS
-	wp_enqueue_script(
-		'swiper-script',
-		'https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js',
-		array('jquery'), // Add jQuery as a dependency if needed
-		'8.0.7', // Swiper version
-		true // Load in footer
-	);
+	// Enqueue Slick Slider theme CSS (optional, for default styling)
+	wp_enqueue_style('slick-slider-theme-css', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css', array(), '1.8.1');
+
+	// Enqueue jQuery (WordPress includes jQuery by default, so this is for safety)
+
+	// Enqueue Slick Slider JS
+	wp_enqueue_script('slick-slider-js', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js', array('jquery'), '1.8.1', true);
+
+	// Optionally, enqueue a custom script to initialize Slick Slider
+	wp_enqueue_script('custom-slick-init', get_template_directory_uri() . '/assets/js/custom-slick-init.js', array('slick-slider-js'), false, true);
 }
-add_action('wp_enqueue_scripts', 'swiper_slide_enqueue_script');
-
-
+add_action('wp_enqueue_scripts', 'enqueue_slick_slider');
 
 
 

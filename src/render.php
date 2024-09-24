@@ -68,7 +68,7 @@ if ($type === 'recents') {
 		$output .= '<div class="ws_card_hover_charts ws_flex">';
 		$output .= '<div class="circular-progress page-trust">';
 		$output .= '<div class="progress-text">';
-		$output .= '<div role="progressbar" aria-valuenow="' . esc_attr($domain['pa']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['pa']) . '"></div>';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['pa']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['pa']) . '"></div>';
 		$output .= '</div>'; // Close progress-text
 		$output .= '<div class="progress-title">';
 		$output .= '<h6>Page Trust</h6>';
@@ -77,7 +77,7 @@ if ($type === 'recents') {
 
 		$output .= '<div class="circular-progress domain-trust">';
 		$output .= '<div class="progress-text">';
-		$output .= '<div role="progressbar" aria-valuenow="' . esc_attr($domain['da']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['da']) . '"></div>';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['da']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['da']) . '"></div>';
 		$output .= '</div>'; // Close progress-text
 		$output .= '<div class="progress-title">';
 		$output .= '<h6>Domain Trust</h6>';
@@ -192,7 +192,9 @@ if ($type === 'recents') {
 		$output .= '<div class="ws_card_hover_charts ws_flex">';
 		$output .= '<div class="circular-progress page-trust">';
 		$output .= '<div class="progress-text">';
-		$output .= '<div role="progressbar" aria-valuenow="' . esc_attr($domain['pa']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['pa']) . '"></div>';
+		$output .= '<div class="arpan"></div>';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['pa']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . (int) esc_attr($domain['pa']) . '"></div>';
+
 		$output .= '</div>'; // Close progress-text
 		$output .= '<div class="progress-title">';
 		$output .= '<h6>Page Trust</h6>';
@@ -201,7 +203,7 @@ if ($type === 'recents') {
 
 		$output .= '<div class="circular-progress domain-trust">';
 		$output .= '<div class="progress-text">';
-		$output .= '<div role="progressbar" aria-valuenow="' . esc_attr($domain['da']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['da']) . '"></div>';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['da']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . (int) esc_attr($domain['da']) . '"></div>';
 		$output .= '</div>'; // Close progress-text
 		$output .= '<div class="progress-title">';
 		$output .= '<h6>Domain Trust</h6>';
