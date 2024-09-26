@@ -68,7 +68,7 @@ if ($type === 'recents') {
 		$output .= '<div class="ws_card_hover_charts ws_flex">';
 		$output .= '<div class="circular-progress page-trust">';
 		$output .= '<div class="progress-text">';
-		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['pa']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['pa']) . '"></div>';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['pa']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . (int) esc_attr($domain['pa']) . '"></div>';
 		$output .= '</div>'; // Close progress-text
 		$output .= '<div class="progress-title">';
 		$output .= '<h6>Page Trust</h6>';
@@ -77,7 +77,7 @@ if ($type === 'recents') {
 
 		$output .= '<div class="circular-progress domain-trust">';
 		$output .= '<div class="progress-text">';
-		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['da']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . esc_attr($domain['da']) . '"></div>';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['da']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . (int) esc_attr($domain['da']) . '"></div>';
 		$output .= '</div>'; // Close progress-text
 		$output .= '<div class="progress-title">';
 		$output .= '<h6>Domain Trust</h6>';
@@ -110,7 +110,7 @@ if ($type === 'recents') {
 	$output .= '</div>';
 	$output .= '</div>';
 } elseif ($type === 'trending') {
-	$output .= '<div class="ws_trending_cards">';
+	$output .= '<div class="ws_trending_cards ws_home_trending_cards">';
 	$output .= '<div class="ws-cards-container-wrapper ws_cards_xl">';
 	foreach ($domains as $domain) {
 
@@ -127,14 +127,16 @@ if ($type === 'recents') {
 		// Define the logo URL
 		$logo = !empty($domain['logo']) ? esc_url($domain['logo']) : '';
 		$display_image = !empty($logo) ? $logo : $image_url;
-		$output .= '<div class="ws-card-contents ws-flex">';
+		$output .= '<div class="ws-card-contents">';
 		if ((int) $discount_percent > 0) {
 			$output .= '<div class="ws_discount_percent"> -' . $discount_percent . '%</div>';
 		}
+		$output .= '<div class="ws_home_trending_contents">';
 		$output .= '<img src="' . $display_image . '" alt="' . $title . '" title="' . $title . '" class="card_logo_img"/>';
 		$output .= '<span class="ws-card-inner-contents">';
 		$output .= '<h5><a href="' . esc_url($domain['permalink']) . '">' . $title . '</a></h5>';
 		$output .= '<div class="ws_card_price_wrapper ws_flex gap_10">';
+
 
 		// Regular Price
 		// $regular_price = get_wstr_regular_price(get_the_ID());
@@ -153,7 +155,29 @@ if ($type === 'recents') {
 		$output .= '<div class="ws-card-likes">';
 		$output .= '<h6><span>2k</span><i class="fa-solid fa-heart"></i></h6>'; // Example placeholder
 		$output .= '</div>';
+		$output .= '</div>';
+		$output .= '<div class="ws_card_hover_charts ws_flex">';
+		$output .= '<div class="circular-progress page-trust">';
+		$output .= '<div class="progress-text">';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['pa']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . (int) esc_attr($domain['pa']) . '"></div>';
+		$output .= '</div>'; // Close progress-text
+		$output .= '<div class="progress-title">';
+		$output .= '<h6>Page Trust</h6>';
+		$output .= '</div>'; // Close progress-title
+		$output .= '</div>'; // Close circular-progress
+
+		$output .= '<div class="circular-progress domain-trust">';
+		$output .= '<div class="progress-text">';
+		$output .= '<div role="progressbar" aria-valuenow="' . (int) esc_attr($domain['da']) . '" aria-valuemin="0" aria-valuemax="100" style="--value:' . (int) esc_attr($domain['da']) . '"></div>';
+		$output .= '</div>'; // Close progress-text
+		$output .= '<div class="progress-title">';
+		$output .= '<h6>Domain Trust</h6>';
+		$output .= '</div>'; // Close progress-title
+		$output .= '</div>'; // Close circular-progress
+		$output .= '</div>';
 		$output .= '</div>'; // Close ws-card-contents
+
+
 	}
 	$output .= '</div>';
 	$output .= '</div>';
